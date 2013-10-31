@@ -1,7 +1,9 @@
 Egal.js
 =======
 [![NPM version][npm-badge]](http://badge.fury.io/js/egal)
+[![Build status][travis-badge]](https://travis-ci.org/moll/js-egal)
 [npm-badge]: https://badge.fury.io/js/egal.png
+[travis-badge]: https://travis-ci.org/moll/js-egal.png?branch=master
 
 Egal.js provides a single `egal` function that tests **strict equality** (`===`)
 and supports both built-in and custom **value objects** like `Date` and `RegExp`
