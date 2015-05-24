@@ -2,7 +2,7 @@ var kindof = require("kindof")
 
 module.exports = function egal(a, b) {
   if (a === b) return true
-  
+
   var type = kindof(a)
   if (type != kindof(b)) return false
 
