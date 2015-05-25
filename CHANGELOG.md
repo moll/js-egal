@@ -1,4 +1,4 @@
-## Unreleased
+## 1.0.0 (May 25, 2015)
 - No longer considers a primitive and boxed object of the same value to be
   equivalent.  
   Two boxed objects of the same value will remain equivalent.
