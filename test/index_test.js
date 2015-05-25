@@ -1,6 +1,9 @@
 var egal = require("..")
 
 describe("egal", function() {
+  // Allow using Boolean, Number, String as constructors in tests.
+  /* jshint -W053 */
+
   it("must return true given nulls", function() {
     egal(null, null).must.be.true()
   })
