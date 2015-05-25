@@ -1,9 +1,7 @@
 Egal.js
 =======
-[![NPM version][npm-badge]](http://badge.fury.io/js/egal)
+[![NPM version][npm-badge]](https://www.npmjs.com/package/egal)
 [![Build status][travis-badge]](https://travis-ci.org/moll/js-egal)
-[npm-badge]: https://badge.fury.io/js/egal.png
-[travis-badge]: https://travis-ci.org/moll/js-egal.png?branch=master
 
 Egal.js provides a single `egal` function that tests **strict equality** (`===`)
 and supports both built-in and custom **value objects** like `Date` and `RegExp`
@@ -41,6 +39,8 @@ when you don't need to distinguish between the two, you'll end up with too many
 false negatives. If you need to handle negative zeros differently, see the
 article on [Sameness in JavaScript][sameness].
 
+[npm-badge]: https://img.shields.io/npm/v/egal.svg
+[travis-badge]: https://travis-ci.org/moll/js-egal.png?branch=master
 [valueof]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf
 [sameness]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Sameness
 
