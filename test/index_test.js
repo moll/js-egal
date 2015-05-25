@@ -231,12 +231,12 @@ describe("egal", function() {
 
   describe("given Object", function() {
     it("must return true given same object", function() {
-      var object = []
+      var object = {}
       egal(object, object).must.be.true()
     })
 
     it("must return false given empty objects", function() {
-      egal([], []).must.be.false()
+      egal({}, {}).must.be.false()
     })
 
     it("must return false given equivalent objects", function() {
