@@ -37,7 +37,7 @@ describe("egal", function() {
       it("must return false given "+bool+" primitive with "+!bool, function() {
         egal(bool, !bool).must.be.false()
       })
-      
+
       it("must return false given "+bool+" and "+!bool+" primitives ",
         function() {
         egal(bool, !bool).must.be.false()
@@ -108,7 +108,7 @@ describe("egal", function() {
       })
     })
   })
-  
+
   describe("given String", function() {
     it("must return true given equivalent primitives", function() {
       egal("ok", "ok").must.be.true()
@@ -174,7 +174,7 @@ describe("egal", function() {
       egal([1], [1]).must.be.false()
     })
   })
-  
+
   describe("given Function", function() {
     it("must return true given identical functions", function() {
       var fn = new Function
@@ -226,7 +226,7 @@ describe("egal", function() {
         Value.prototype.valueOf = function() { return this.value }
         function Price(value) { this.value = value }
         Price.prototype.valueOf = function() { return this.value }
-        
+
         var a = new Value(42)
         var b = new Price(42)
         egal(a, b).must.be.false()
@@ -239,7 +239,7 @@ describe("egal", function() {
         MoreValue.prototype = Object.create(Value.prototype, {
           constructor: {value: MoreValue, configurable: 1, writable: 1}
         })
-        
+
         var a = new Value(42)
         var b = new MoreValue(42)
         egal(a, b).must.be.false()
