@@ -244,6 +244,14 @@ describe("egal", function() {
     })
 
     describe("with valueOf", function() {
+      it("must return true given equal value", function() {
+        function Value(value) { this.value = value }
+        Value.prototype.valueOf = function() { return this.value }
+        var a = new Value(42)
+        var b = new Value(42)
+        egal(a, b).must.be.true()
+      })
+
       it("must return false given plain object", function() {
         var a = {valueOf: function() { return 1 }}
         var b = {valueOf: function() { return 1 }}
@@ -254,14 +262,6 @@ describe("egal", function() {
         var a = Object.create(null)
         var b = Object.create(null)
         egal(a, b).must.be.false()
-      })
-
-      it("must return true given equal value", function() {
-        function Value(value) { this.value = value }
-        Value.prototype.valueOf = function() { return this.value }
-        var a = new Value(42)
-        var b = new Value(42)
-        egal(a, b).must.be.true()
       })
 
       it("must return false given different constructors", function() {
@@ -278,6 +278,7 @@ describe("egal", function() {
       it("must return false given subclassed constructor", function() {
         function Value(value) { this.value = value }
         Value.prototype.valueOf = function() { return this.value }
+
         function MoreValue(value) { this.value = value }
         MoreValue.prototype = Object.create(Value.prototype, {
           constructor: {value: MoreValue, configurable: 1, writable: 1}
@@ -294,6 +295,7 @@ describe("egal", function() {
         var a = new Value(42)
         var b = new Value("42")
         egal(a, b).must.be.false()
+        egal(b, a).must.be.false()
       })
 
       it("must return false given non-function valueOfs", function() {
