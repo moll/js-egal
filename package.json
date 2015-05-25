@@ -1,7 +1,7 @@
 {
 	"name": "egal",
 	"version": "0.1.337",
-	"description": "Strict equality test (like ===) that handles both built-in and custom value objects (those with the valueOf function).",
+	"description": "Strict equality test (like ===) that handles both built-in and custom value objects (those with a valueOf function).",
 	"keywords": [
 		"compare",
 		"eql",
