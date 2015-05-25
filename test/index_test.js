@@ -177,7 +177,7 @@ describe("egal", function() {
 
   describe("given Function", function() {
     it("must return true given identical functions", function() {
-      var fn = new Function
+      function fn() {}
       egal(fn, fn).must.be.true()
     })
 
