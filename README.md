@@ -3,30 +3,32 @@ Egal.js
 [![NPM version][npm-badge]](https://www.npmjs.com/package/egal)
 [![Build status][travis-badge]](https://travis-ci.org/moll/js-egal)
 
-Egal.js provides a single `egal` function that tests **strict equality** (`===`)
-and supports both built-in and custom **value objects** like `Date` and `RegExp`
-in a **type-safe** way. It also supports comparing **boxed value objects** like
-`new Number(42)` with **primitives** like `42`.
+Egal.js provides a single `egal` function that tests **strict equality** (like
+`===`), but adds support for built-in and custom [**value
+objects**][value-object] in a **type-safe** way.
 
 ### Tour
 When and why to use `egal` over the triple-equals `===` operator?
 
-- When you need to compare the **semantic equivalence** of objects without
+- When you need to compare the **semantic equivalence** of value objects without
   requiring the same object identity.  
-  JavaScript's `===` considers two different `Date` or `RegExp` objects unequal,
-  even if they mean the same thing.
-- When you need to **compare both primitives** (`42`) and **objects** (`new
-  Number(42)`) the same way for robustness.  
-  Did you know `new Number(42) == new Number(42)` in plain JavaScript is false?
+  JavaScript's `==` and `===` consider two different `Date` or `RegExp` objects
+  unequal, even if they mean the same thing.
 - When you need to **compare custom value objects** in a type-safe way.  
   Value objects are objects that have a [`valueOf`][valueof] function. Egal.js
   makes sure the two objects with `valueOf` are actually from the same
   constructor.
 
+A **primivitive** and its **boxed object** equivalent are considered different.
+Allowing unexpected boxed objects (e.g. `new Boolean(false)`) through is risky
+as they're extremely error prone (just think of `!!new Boolean(false)` returning
+`true`).  Comparing two boxed objects of the same value, on the other hand, will
+work.
+
 **Non-value objects**, like `Array` or `Object`, are compared as `===` does it
-— based on object identity. Egal.js is not a recursive or *deep equals* library,
-but simply a strict equals comparison that supports value objects. For testing
-arrays, you can use `Array.prototype.every`.
+— based on object identity. Egal.js doesn't do compare recursively or deeply.
+It simply extends `===` with support value objects. For testing arrays, you can
+use `Array.prototype.every`.
 
 **NaN**s (not-a-number) are **not equal** (matching how `===` behaves). This is
 because when you compare results of two mathematical operations that may both
@@ -41,6 +43,7 @@ article on [Sameness in JavaScript][sameness].
 
 [npm-badge]: https://img.shields.io/npm/v/egal.svg
 [travis-badge]: https://travis-ci.org/moll/js-egal.png?branch=master
+[value-object]: https://en.wikipedia.org/wiki/Value_object
 [valueof]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf
 [sameness]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Sameness
 

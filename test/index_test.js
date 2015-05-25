@@ -24,35 +24,32 @@ describe("egal", function() {
   })
 
   describe("given Boolean", function() {
-    function mustEgalBoolean(bool) {
-      it("must return true given "+bool+" primitives", function() {
-        egal(bool, bool).must.be.true()
-      })
+    it("must return true given equivalent primitives", function() {
+      egal(true, true).must.be.true()
+      egal(false, false).must.be.true()
+    })
 
-      it("must return true given "+bool+" primitive and object", function() {
-        egal(new Boolean(bool), new Boolean(bool)).must.be.true()
-      })
+    it("must return false given unequivalent primitives", function() {
+      egal(true, false).must.be.false()
+      egal(false, true).must.be.false()
+    })
 
-      it("must return true given "+bool+" objects", function() {
-        egal(new Boolean(bool), new Boolean(bool)).must.be.true()
-      })
+    it("must return true given equivalent objects", function() {
+      egal(new Boolean(true), new Boolean(true)).must.be.true()
+      egal(new Boolean(false), new Boolean(false)).must.be.true()
+    })
 
-      it("must return false given "+bool+" primitive with "+!bool, function() {
-        egal(bool, !bool).must.be.false()
-      })
+    it("must return false given unequivalent objects", function() {
+      egal(new Boolean(true), new Boolean(false)).must.be.false()
+      egal(new Boolean(false), new Boolean(true)).must.be.false()
+    })
 
-      it("must return false given "+bool+" and "+!bool+" primitives ",
-        function() {
-        egal(bool, !bool).must.be.false()
-      })
-
-      it("must return false given "+bool+" and "+!bool+" objects", function() {
-        egal(new Boolean(bool), new Boolean(!bool)).must.be.false()
-      })
-    }
-
-    mustEgalBoolean(true)
-    mustEgalBoolean(false)
+    it("must return false given equivalent primitive and object", function() {
+      egal(true, new Boolean(true)).must.be.false()
+      egal(new Boolean(true), true).must.be.false()
+      egal(false, new Boolean(false)).must.be.false()
+      egal(new Boolean(false), false).must.be.false()
+    })
   })
 
   describe("given Number", function() {
@@ -60,54 +57,69 @@ describe("egal", function() {
       egal(42, 42).must.be.true()
     })
 
-    it("must return true given equivalent primitive and object", function() {
-      egal(42, new Number(42)).must.be.true()
-      egal(new Number(42), 42).must.be.true()
-    })
-
-    it("must return true given equivalent objects", function() {
-      egal(new Number(42), new Number(42)).must.be.true()
-    })
-
     it("must return false given unequivalent primitives", function() {
       egal(42, 69).must.be.false()
-    })
-
-    it("must return false given unequivalent objects", function() {
-      egal(new Number(42), new Number(69)).must.be.false()
     })
 
     it("must return false given string", function() {
       egal(42, "69").must.be.false()
     })
 
+    it("must return false given NaN primitives", function() {
+      egal(NaN, NaN).must.be.false()
+    })
+
+    it("must return true given equivalent zero primitives", function() {
+      egal(-0, +0).must.be.true()
+    })
+
+    it("must return true given equivalent objects", function() {
+      egal(new Number(42), new Number(42)).must.be.true()
+    })
+
+    it("must return false given unequivalent objects", function() {
+      egal(new Number(42), new Number(69)).must.be.false()
+    })
+
+    it("must return false given NaN objects", function() {
+      egal(new Number(NaN), new Number(NaN)).must.be.false()
+    })
+
+    it("must return true given equivalent zero objects", function() {
+      egal(new Number(-0), new Number(+0)).must.be.true()
+    })
+
+    it("must return false given equivalent primitive and object", function() {
+      egal(42, new Number(42)).must.be.false()
+      egal(new Number(42), 42).must.be.false()
+    })
+
     describe("given Infinity", function() {
-      it("must return true given primitivies", function() {
+      it("must return true given equivalent primitivies", function() {
         egal(Infinity, Infinity).must.be.true()
         egal(-Infinity, -Infinity).must.be.true()
       })
 
-      it("must return true given -Infinities", function() {
-      })
-
-      it("must return false given Infinity and -Infinity primitives",
-        function() {
+      it("must return false unequivalent primitives", function() {
         egal(Infinity, -Infinity).must.be.false()
         egal(-Infinity, Infinity).must.be.false()
       })
 
-      it("must return false given Infinity and -Infinity primitive and object",
-        function() {
-        egal(Infinity, new Number(-Infinity)).must.be.false()
-        egal(-Infinity, new Number(Infinity)).must.be.false()
-        egal(new Number(Infinity), -Infinity).must.be.false()
-        egal(new Number(-Infinity), Infinity).must.be.false()
+      it("must return true given equivalent objects", function() {
+        egal(new Number(Infinity), new Number(Infinity)).must.be.true()
+        egal(new Number(-Infinity), new Number(-Infinity)).must.be.true()
       })
 
-      it("must return false given Infinity and -Infinity objects",
-        function() {
+      it("must return false given unequivalent objects", function() {
         egal(new Number(Infinity), new Number(-Infinity)).must.be.false()
         egal(new Number(-Infinity), new Number(Infinity)).must.be.false()
+      })
+
+      it("must return false given equivalent primitive and object", function() {
+        egal(Infinity, new Number(Infinity)).must.be.false()
+        egal(new Number(Infinity), Infinity).must.be.false()
+        egal(new Number(-Infinity), -Infinity).must.be.false()
+        egal(-Infinity, new Number(-Infinity)).must.be.false()
       })
     })
   })
@@ -117,21 +129,21 @@ describe("egal", function() {
       egal("ok", "ok").must.be.true()
     })
 
-    it("must return true given equivalent primitive and object", function() {
-      egal("ok", new String("ok")).must.be.true()
-      egal(new String("ok"), "ok").must.be.true()
+    it("must return false given unequivalent primitives", function() {
+      egal("ok", "no").must.be.false()
     })
 
     it("must return true given equivalent objects", function() {
       egal(new String("ok"), new String("ok")).must.be.true()
     })
 
-    it("must return false given unequivalent primitives", function() {
-      egal("ok", "no").must.be.false()
-    })
-
     it("must return false given unequivalent objects", function() {
       egal(new String("ok"), new String("no")).must.be.false()
+    })
+
+    it("must return false given equivalent primitive and object", function() {
+      egal("ok", new String("ok")).must.be.false()
+      egal(new String("ok"), "ok").must.be.false()
     })
 
     it("must return false given number", function() {
@@ -151,6 +163,10 @@ describe("egal", function() {
     it("must return false if given unequivalent flags", function() {
       egal(/a/ig, /a/i).must.be.false()
     })
+
+    it("must return false given RegExp and string", function() {
+      egal(/a/, "/a/").must.be.false()
+    })
   })
 
   describe("given Date", function() {
@@ -160,6 +176,10 @@ describe("egal", function() {
 
     it("must return false given unequivalent dates", function() {
       egal(new Date(2000, 5), new Date(1999, 5)).must.be.false()
+    })
+
+    it("must return false given date and number", function() {
+      egal(new Date(1337), 1337).must.be.false()
     })
   })
 
