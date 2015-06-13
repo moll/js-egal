@@ -64,3 +64,309 @@ describe("egal", function() {
     })
   })
 })
+
+describe("deepEgal", function() {
+  var deepEgal = wrap(require("..").deepEgal, function(orig, a, b) {
+    var equal = orig(a, b)
+    orig(b, a).must.equal(equal)
+    return equal
+  })
+
+  it("must return false given an empty array and empty object", function() {
+    deepEgal({}, []).must.be.false()
+  })
+
+  require("./_null_test")(deepEgal)
+  require("./_boolean_test")(deepEgal)
+  require("./_number_test")(deepEgal)
+  require("./_string_test")(deepEgal)
+  require("./_symbol_test")(deepEgal)
+  require("./_regexp_test")(deepEgal)
+  require("./_date_test")(deepEgal)
+  require("./_function_test")(deepEgal)
+  require("./_value_object_test")(deepEgal)
+
+  describe("given Array", function() {
+    it("must return true empty equivalent arrays", function() {
+      deepEgal([], []).must.be.true()
+    })
+
+    it("must return true given equivalent arrays", function() {
+      deepEgal([1], [1]).must.be.true()
+      deepEgal([1, 2, 3], [1, 2, 3]).must.be.true()
+    })
+
+    it("must return true given identical arrays", function() {
+      var array = []
+      deepEgal(array, array).must.be.true()
+    })
+
+    it("must return false given an empty and non-empty array", function() {
+      deepEgal([], [1]).must.be.false()
+    })
+
+    it("must return false given a smaller and a larger array", function() {
+      deepEgal([1], [1, 2]).must.be.false()
+    })
+
+    it("must return true given equivalent nested arrays", function() {
+      deepEgal([1, [2], 3], [1, [2], 3]).must.be.true()
+    })
+
+    it("must return false given unequivalent nested arrays", function() {
+      deepEgal([1, [2], 3], [1, [42], 3]).must.be.false()
+    })
+
+    describe("with circular references", function() {
+      it("must return true if equal", function() {
+        var a = [1, 2, 3]
+        a.push(a)
+        a.push(5)
+
+        var b = [1, 2, 3]
+        b.push(b)
+        b.push(5)
+
+        deepEgal(a, b).must.be.true()
+      })
+
+      it("must return false if only one circular", function() {
+        var a = [1, 2, 3]
+        a.push(a)
+        a.push(5)
+
+        var b = [1, 2, 3]
+        b.push([1, 2, 3, 5])
+        b.push(5)
+
+        deepEgal(a, b).must.be.false()
+      })
+
+      it("must return false if circular to different levels", function() {
+        var a = [1, 2, 3]
+        a.push(a)
+
+        var b = [1, 2, 3]
+        var bInside = [1, 2, 3]
+        bInside.push(bInside)
+        b.push(bInside)
+
+        deepEgal(a, b).must.be.false()
+      })
+    })
+
+    describe("with nested values", function() {
+      function nestedDeepEgal(a, b) { return deepEgal([a], [b]) }
+
+      require("./_null_test")(nestedDeepEgal)
+      require("./_boolean_test")(nestedDeepEgal)
+      require("./_number_test")(nestedDeepEgal)
+      require("./_string_test")(nestedDeepEgal)
+      require("./_symbol_test")(nestedDeepEgal)
+      require("./_regexp_test")(nestedDeepEgal)
+      require("./_date_test")(nestedDeepEgal)
+      require("./_function_test")(nestedDeepEgal)
+      require("./_value_object_test")(nestedDeepEgal)
+    })
+  })
+
+  describe("given Object", function() {
+    it("must return true given identical objects", function() {
+      var obj = {a: 42, b: 69}
+      deepEgal(obj, obj).must.be.true()
+    })
+
+    it("must return true given empty objects", function() {
+      deepEgal({}, {}).must.be.true()
+    })
+
+    it("must return false given an empty and filled object", function() {
+      deepEgal({}, {name: "John"}).must.be.false()
+    })
+
+    it("must return false given a smaller and larger object", function() {
+      var a = {a: 42, b: 69}
+      var b = {a: 42}
+      deepEgal(a, b).must.be.false()
+    })
+
+    // This was a bug I discovered on Jun 12, 2015 related to not comparing
+    // keys equivalence before comparing their values.
+    it("must return false given equal amount of keys undefined keys",
+      function() {
+      deepEgal({name: undefined}, {age: undefined}).must.be.false()
+      deepEgal({name: undefined}, {age: 13}).must.be.false()
+    })
+
+    it("must return true given equivalent objects", function() {
+      var a = {a: 42, b: 69}
+      var b = {a: 42, b: 69}
+      deepEgal(a, b).must.be.true()
+    })
+
+    it("must return false given objects with differently typed properties",
+      function() {
+      var a = {a: "42", b: 69}
+      var b = {a: 42, b: 69}
+      deepEgal(a, b).must.be.false()
+    })
+
+    it("must return true given an object with set constructor property",
+      function() {
+      var a = {constructor: 1337}
+      var b = {constructor: 1337}
+      deepEgal(a, b).must.be.true()
+    })
+
+    it("must return true given a deep object", function() {
+      var a = {life: {love: 69}}
+      var b = {life: {love: 69}}
+      deepEgal(a, b).must.be.true()
+    })
+
+    it("must return false given an unequivalent deep object", function() {
+      var a = {life: {love: 69}}
+      var b = {life: {love: 42}}
+      deepEgal(a, b).must.be.false()
+    })
+
+    describe("with circular references", function() {
+      it("must return true if equal", function() {
+        var a = {life: {love: 69}}
+        a.self = a
+
+        var b = ({life: {love: 69}})
+        b.self = b
+
+        deepEgal(a, b).must.be.true()
+      })
+
+      it("must return false if only one circular", function() {
+        var a = ({life: {love: 69}})
+        a.self = a
+
+        var b = ({life: {love: 69}})
+        b.self = {life: {love: 69}, self: {}}
+
+        deepEgal(a, b).must.be.false()
+      })
+
+      it("must return false if circular to different levels", function() {
+        var a = ({life: {love: 69}})
+        a.self = a
+
+        var b = ({life: {love: 69}})
+        var bInside = ({life: {love: 69}})
+        bInside.self = bInside
+        b.self = bInside
+
+        deepEgal(a, b).must.be.false()
+      })
+    })
+
+    describe("with inheritance", function() {
+      it("must return true given empty inherited objects", function() {
+        var a = Object.create({})
+        var b = Object.create({})
+        deepEgal(a, b).must.be.true()
+      })
+
+      it("must return true given empty ancestored objects", function() {
+        var a = Object.create(Object.create({}))
+        var b = Object.create(Object.create({}))
+        deepEgal(a, b).must.be.true()
+      })
+
+      it("must return true given empty objects inherited from null", function() {
+        var a = Object.create(null)
+        var b = Object.create(null)
+        deepEgal(a, b).must.be.true()
+      })
+
+      it("must return true given empty objects ancestored from null",
+        function() {
+        var a = Object.create(Object.create(null))
+        var b = Object.create(Object.create(null))
+        deepEgal(a, b).must.be.true()
+      })
+
+      it("must return true given equivalent inherited objects", function() {
+        var a = Object.create({love: 42})
+        var b = Object.create({love: 42})
+        deepEgal(a, b).must.be.true()
+      })
+
+      it("must return true given equivalent ancestored objects", function() {
+        var a = Object.create(Object.create({love: 42}))
+        var b = Object.create(Object.create({love: 42}))
+        deepEgal(a, b).must.be.true()
+      })
+
+      it("must return true given equivalent objects inherited from null",
+        function() {
+        var a = Object.create(null, {life: {value: 42, enumerable: true}})
+        var b = Object.create(null, {life: {value: 42, enumerable: true}})
+        deepEgal(a, b).must.be.true()
+      })
+
+      it("must return true given equivalent objects ancestored from null",
+        function() {
+        var a = Object.create(Object.create(null, {
+          life: {value: 42, enumerable: true}
+        }))
+
+        var b = Object.create(Object.create(null, {
+          life: {value: 42, enumerable: true}
+        }))
+
+        deepEgal(a, b).must.be.true()
+      })
+
+      it("must return false given unequivalent inherited objects", function() {
+        var a = Object.create({love: 42})
+        var b = Object.create({love: 69})
+        deepEgal(a, b).must.be.false()
+      })
+
+      it("must return false given unequivalent ancestored objects", function() {
+        var a = Object.create(Object.create({love: 42}))
+        var b = Object.create(Object.create({love: 69}))
+        deepEgal(a, b).must.be.false()
+      })
+
+      it("must return false given unequivalent objects inherited from null",
+        function() {
+        var a = Object.create(null, {life: {value: 42, enumerable: true}})
+        var b = Object.create(null, {life: {value: 69, enumerable: true}})
+        deepEgal(a, b).must.be.false()
+      })
+
+      it("must return false given unequivalent objects ancestored from null",
+        function() {
+        var a = Object.create(Object.create(null, {
+          life: {value: 42, enumerable: true}
+        }))
+
+        var b = Object.create(Object.create(null, {
+          life: {value: 69, enumerable: true}
+        }))
+
+        deepEgal(a, b).must.be.false()
+      })
+    })
+
+    describe("with nested values", function() {
+      function nestedDeepEgal(a, b) { return deepEgal({key: a}, {key: b}) }
+
+      require("./_null_test")(nestedDeepEgal)
+      require("./_boolean_test")(nestedDeepEgal)
+      require("./_number_test")(nestedDeepEgal)
+      require("./_string_test")(nestedDeepEgal)
+      require("./_symbol_test")(nestedDeepEgal)
+      require("./_regexp_test")(nestedDeepEgal)
+      require("./_date_test")(nestedDeepEgal)
+      require("./_function_test")(nestedDeepEgal)
+      require("./_value_object_test")(nestedDeepEgal)
+    })
+  })
+})

@@ -3,9 +3,12 @@ Egal.js
 [![NPM version][npm-badge]](https://www.npmjs.com/package/egal)
 [![Build status][travis-badge]](https://travis-ci.org/moll/js-egal)
 
-Egal.js provides a single `egal` function that tests **strict equality** (like
+Egal.js provides an `egal` function that tests **strict equality** (like
 `===`), but adds support for built-in and custom [**value
-objects**][value-object] in a **type-safe** way.
+objects**][value-object] in a **type-safe** way. It also has a `deepEgal`
+function for comparing **plain objects and arrays recursively** or deeply
+without giving up on type-safeness on the way. It also handles **circular
+references**.
 
 ### Tour
 When and why to use `egal` over the triple-equals `===` operator?
@@ -18,6 +21,8 @@ When and why to use `egal` over the triple-equals `===` operator?
   Value objects are objects that have a [`valueOf`][valueof] function. Egal.js
   makes sure the two objects with `valueOf` are actually from the same
   constructor.
+- When you need to **compare objects or arrays recursively**, Egal.js has
+  [`deepEgal`](#deep-comparison).
 
 A **primivitive** and its **boxed object** equivalent are considered different.
 Allowing unexpected boxed objects (e.g. `new Boolean(false)`) through is risky
@@ -25,10 +30,9 @@ as they're extremely error prone (just think of `!!new Boolean(false)` returning
 `true`).  Comparing two boxed objects of the same value, on the other hand, will
 work.
 
-**Non-value objects**, like `Array` or `Object`, are compared as `===` does it
-— based on object identity. Egal.js doesn't do compare recursively or deeply.
-It simply extends `===` with support value objects. For testing arrays, you can
-use `Array.prototype.every`.
+**Non-value objects**, like `Array` or `Object`, are compared by `egal` as `===`
+does it — based on object identity. For recursive or deep comparison, see
+[`deepEgal`](#deep-comparison).
 
 **NaN**s (not-a-number) are **not equal** (matching how `===` behaves). This is
 because when you compare results of two mathematical operations that may both
@@ -77,6 +81,7 @@ egal(new Date(2000, 5, 18), new Date(2000, 5, 18)) // => true
 egal(/abc/i, /abc/i) // => true
 ```
 
+### Value Objects
 To make and compare custom value objects, create a new constructor and give its
 prototype a `valueOf` function:
 ```javascript
@@ -93,6 +98,38 @@ function Car(name) { this.name = name }
 OtherValue.prototype.valueOf = function() { return this.name }
 egal(new Song("KITT"), new Car("KITT")) // => false
 ```
+
+Objects that are instances of a class (their `constructor` property set to
+something other than `Object`) but lack a `valueOf` function, thereby not being
+value objects, are compared by reference (`===`).
+
+### Deep Comparison
+As of v1.1.0, Egal.js comes with a recursive or deep comparison function named
+`deepEgal`. It was mostly extracted from the [Must.js][must] testing library's
+`eql` function.
+
+```javascript
+var deepEgal = require("egal").deepEgal
+function Model(name) { this.name = name }
+
+deepEgal(42, 42) // => true
+deepEgal({name: "John"}, {name: "John"}) // => true
+deepEgal({stats: {age: 13}}, {{stats: age: 13}}) // => true
+deepEgal([1, 2, 3], [1, 2, 3]) // => true
+deepEgal(new Model("John"), new Model("John")) // => false
+deepEgal(new Date(2000, 5), new Date(2000, 5)) // => true
+```
+
+The `deepEgal` function compares regular primitive values, model instances and
+value objects just like `egal`.
+
+Plain objects (those with no custom `constructor` property in their
+prototype), are compared recursively by their enumerable properties.  Arrays are
+compared recursively by their contents (iterating over `length`). See above
+about [value objects](#value-objects) for more details on plain, instances and
+value objects.
+
+[must]: https://github.com/moll/js-must
 
 
 License
