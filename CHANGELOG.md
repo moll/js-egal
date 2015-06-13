@@ -1,4 +1,4 @@
-## Unreleased
+## 1.1.0 (Jun 13, 2015)
 - Adds `deepEgal` for comparing plain objects and arrays recursively.  
   It's still type-safe, so value objects and instances of classes nested in
   plain objects as compared as `egal` — by value if possible (same constructor
