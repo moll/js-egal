@@ -95,7 +95,7 @@ Egal.js makes sure the two instances are from the same constructor before
 comparing their `valueOf` outputs:
 ```javascript
 function Car(name) { this.name = name }
-OtherValue.prototype.valueOf = function() { return this.name }
+Car.prototype.valueOf = function() { return this.name }
 egal(new Song("KITT"), new Car("KITT")) // => false
 ```
 
