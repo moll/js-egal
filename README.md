@@ -87,6 +87,7 @@ prototype a `valueOf` function:
 ```javascript
 function Song(name) { this.name = name }
 Song.prototype.valueOf = function() { return this.name }
+
 egal(new Song("Play Guitar"), new Song("Play Guitar")) // => true
 egal(new Song("Play Guitar"), new Song("Crumblin' Down")) // => false
 ```
@@ -94,8 +95,12 @@ egal(new Song("Play Guitar"), new Song("Crumblin' Down")) // => false
 Egal.js makes sure the two instances are from the same constructor before
 comparing their `valueOf` outputs:
 ```javascript
+function Song(name) { this.name = name }
+Song.prototype.valueOf = function() { return this.name }
+
 function Car(name) { this.name = name }
 Car.prototype.valueOf = function() { return this.name }
+
 egal(new Song("KITT"), new Car("KITT")) // => false
 ```
 
