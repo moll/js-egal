@@ -47,7 +47,7 @@ module.exports = function(egal) {
 
       function MoreValue(value) { this.value = value }
       MoreValue.prototype = Object.create(Value.prototype, {
-        constructor: {value: MoreValue, configurable: 1, writable: 1}
+        constructor: {value: MoreValue, configurable: true, writable: true}
       })
 
       var a = new Value(42)

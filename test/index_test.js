@@ -134,11 +134,7 @@ describe("deepEgal", function() {
         var a = [1, 2, 3]
         a.push(a)
         a.push(5)
-
-        var b = [1, 2, 3]
-        b.push([1, 2, 3, 5])
-        b.push(5)
-
+        var b = [1, 2, 3, [1, 2, 3, 5], 5]
         deepEgal(a, b).must.be.false()
       })
 
