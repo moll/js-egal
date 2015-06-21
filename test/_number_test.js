@@ -1,6 +1,7 @@
 module.exports = function(egal) {
   // Allow using Number as constructor:
   /* jshint -W053 */
+  /* eslint no-new-wrappers: 0 */
 
   describe("given Number", function() {
     it("must return true given equivalent primitives", function() {
