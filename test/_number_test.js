@@ -4,7 +4,7 @@ module.exports = function(egal) {
   /* eslint no-new-wrappers: 0 */
 
   describe("given Number", function() {
-    it("must return true given equivalent primitives", function() {
+    it("must return true given identical primitives", function() {
       egal(42, 42).must.be.true()
     })
 
@@ -12,7 +12,7 @@ module.exports = function(egal) {
       egal(42, 69).must.be.false()
     })
 
-    it("must return false given string", function() {
+    it("must return false given string primitive", function() {
       egal(42, "69").must.be.false()
     })
 
@@ -29,11 +29,11 @@ module.exports = function(egal) {
     })
 
     describe("given -0", function() {
-      it("must return true given equivalent primitives", function() {
+      it("must return true given primitives", function() {
         egal(-0, +0).must.be.true()
       })
 
-      it("must return true given equivalent objects", function() {
+      it("must return true given objects", function() {
         egal(new Number(-0), new Number(+0)).must.be.true()
       })
     })
@@ -49,12 +49,12 @@ module.exports = function(egal) {
     })
 
     describe("given Infinity", function() {
-      it("must return true given equivalent primitivies", function() {
+      it("must return true given identical primitivies", function() {
         egal(Infinity, Infinity).must.be.true()
         egal(-Infinity, -Infinity).must.be.true()
       })
 
-      it("must return false unequivalent primitives", function() {
+      it("must return false given unequivalent primitives", function() {
         egal(Infinity, -Infinity).must.be.false()
       })
 

@@ -12,7 +12,7 @@ module.exports = function(egal) {
       egal(/a/ig, /a/i).must.be.false()
     })
 
-    it("must return false given RegExp and string", function() {
+    it("must return false given RegExp and string primitive", function() {
       egal(/a/, "/a/").must.be.false()
     })
   })

@@ -8,7 +8,7 @@ module.exports = function(egal) {
       egal(new Date(2000, 5), new Date(1999, 5)).must.be.false()
     })
 
-    it("must return false given date and number", function() {
+    it("must return false given Date and number primitive", function() {
       egal(new Date(1337), 1337).must.be.false()
     })
   })

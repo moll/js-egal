@@ -87,7 +87,7 @@ describe("deepEgal", function() {
   require("./_value_object_test")(deepEgal)
 
   describe("given Array", function() {
-    it("must return true empty equivalent arrays", function() {
+    it("must return true given equivalent empty arrays", function() {
       deepEgal([], []).must.be.true()
     })
 
@@ -277,7 +277,8 @@ describe("deepEgal", function() {
         deepEgal(a, b).must.be.true()
       })
 
-      it("must return true given empty objects inherited from null", function() {
+      it("must return true given empty objects inherited from null",
+        function() {
         var a = Object.create(null)
         var b = Object.create(null)
         deepEgal(a, b).must.be.true()

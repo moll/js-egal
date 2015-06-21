@@ -4,7 +4,7 @@ module.exports = function(egal) {
   /* eslint no-new-wrappers: 0 */
 
   describe("given String", function() {
-    it("must return true given equivalent primitives", function() {
+    it("must return true given identical primitives", function() {
       egal("ok", "ok").must.be.true()
     })
 
@@ -24,7 +24,7 @@ module.exports = function(egal) {
       egal("ok", new String("ok")).must.be.false()
     })
 
-    it("must return false given number", function() {
+    it("must return false given number primitive", function() {
       egal("42", 42).must.be.false()
     })
   })
