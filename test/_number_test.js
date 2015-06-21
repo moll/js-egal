@@ -16,6 +16,10 @@ module.exports = function(egal) {
       egal(42, "69").must.be.false()
     })
 
+    it("must return false given string primitive", function() {
+      egal(42, new String("69")).must.be.false()
+    })
+
     it("must return true given equivalent objects", function() {
       egal(new Number(42), new Number(42)).must.be.true()
     })
@@ -36,6 +40,10 @@ module.exports = function(egal) {
       it("must return true given objects", function() {
         egal(new Number(-0), new Number(+0)).must.be.true()
       })
+
+      it("must return false given primitive and object", function() {
+        egal(-0, new Number(+0)).must.be.false()
+      })
     })
 
     describe("given NaN", function() {
@@ -45,6 +53,10 @@ module.exports = function(egal) {
 
       it("must return false given objects", function() {
         egal(new Number(NaN), new Number(NaN)).must.be.false()
+      })
+
+      it("must return false given number and NaN", function() {
+        egal(42, NaN).must.be.false()
       })
     })
 
@@ -70,6 +82,11 @@ module.exports = function(egal) {
       it("must return false given equivalent primitive and object", function() {
         egal(Infinity, new Number(Infinity)).must.be.false()
         egal(new Number(-Infinity), -Infinity).must.be.false()
+      })
+
+      it("must return false given number and infinity", function() {
+        egal(42, Infinity).must.be.false()
+        egal(42, -Infinity).must.be.false()
       })
     })
   })

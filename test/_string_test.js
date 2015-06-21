@@ -27,5 +27,9 @@ module.exports = function(egal) {
     it("must return false given number primitive", function() {
       egal("42", 42).must.be.false()
     })
+
+    it("must return false given number object", function() {
+      egal("42", new Number(42)).must.be.false()
+    })
   })
 }
