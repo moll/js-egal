@@ -84,6 +84,7 @@ describe("deepEgal", function() {
   require("./_regexp_test")(deepEgal)
   require("./_date_test")(deepEgal)
   require("./_function_test")(deepEgal)
+  require("./_constructed_object_test")(deepEgal)
   require("./_value_object_test")(deepEgal)
 
   describe("given Array", function() {
@@ -162,6 +163,7 @@ describe("deepEgal", function() {
       require("./_regexp_test")(nestedDeepEgal)
       require("./_date_test")(nestedDeepEgal)
       require("./_function_test")(nestedDeepEgal)
+      require("./_constructed_object_test")(nestedDeepEgal)
       require("./_value_object_test")(nestedDeepEgal)
     })
   })
@@ -363,6 +365,7 @@ describe("deepEgal", function() {
       require("./_regexp_test")(nestedDeepEgal)
       require("./_date_test")(nestedDeepEgal)
       require("./_function_test")(nestedDeepEgal)
+      require("./_constructed_object_test")(nestedDeepEgal)
       require("./_value_object_test")(nestedDeepEgal)
     })
   })
