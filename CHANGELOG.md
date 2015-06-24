@@ -1,3 +1,8 @@
+## Unreleased 
+- Fixes `deepEgal` to consider `Array.prototype` equivalent to an empty array.
+  JavaScript is a prototypical language after all and the prototype of an array
+  is an array.
+
 ## 1.1.0 (Jun 13, 2015)
 - Adds `deepEgal` for comparing plain objects and arrays recursively.  
   It's still type-safe, so value objects and instances of classes nested in

@@ -92,6 +92,10 @@ describe("deepEgal", function() {
       deepEgal([], []).must.be.true()
     })
 
+    it("must return true given empty array and Array.prototype", function() {
+      deepEgal([], Array.prototype).must.be.true()
+    })
+
     it("must return true given equivalent arrays", function() {
       deepEgal([1], [1]).must.be.true()
       deepEgal([1, 2, 3], [1, 2, 3]).must.be.true()

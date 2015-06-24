@@ -99,6 +99,7 @@ function kindofPlain(obj) {
 function isPlainObject(obj) {
   if (obj == null) return false
   if (typeof obj !== "object") return false
+  if (Array.isArray(obj)) return false
 
   var prototype = Object.getPrototypeOf(obj)
   if (prototype === null) return true
