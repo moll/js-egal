@@ -80,16 +80,6 @@ function deepEgalRecursively(a, b, aStack, bStack) {
   }
 }
 
-function getConstructorOf(obj) {
-  var prototype = Object.getPrototypeOf(obj)
-  return prototype === null ? undefined : prototype.constructor
-}
-
-function hasValueOf(obj) {
-  var valueOf = obj.valueOf
-  return typeof valueOf === "function" && valueOf !== Object.prototype.valueOf
-}
-
 function kindofPlain(obj) {
   var type = kindof(obj)
   if (type === "object" && isObjectPlain(obj)) return "plain"
@@ -101,6 +91,16 @@ function isObjectPlain(obj) {
   if (prototype === null) return true
   if (!("constructor" in prototype)) return true
   return prototype.constructor === Object
+}
+
+function getConstructorOf(obj) {
+  var prototype = Object.getPrototypeOf(obj)
+  return prototype === null ? undefined : prototype.constructor
+}
+
+function hasValueOf(obj) {
+  var valueOf = obj.valueOf
+  return typeof valueOf === "function" && valueOf !== Object.prototype.valueOf
 }
 
 function keys(obj) {
