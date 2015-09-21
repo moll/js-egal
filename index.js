@@ -6,7 +6,7 @@ function egal(a, b) {
   if (a === b) return true
 
   var type
-  switch (type = kindof(a)) {
+  switch (type = kindofPlain(a)) {
     case "date":
       if (type !== kindof(b)) return false
       return a.valueOf() === b.valueOf()
@@ -16,10 +16,9 @@ function egal(a, b) {
       return a.toString() === b.toString()
 
     case "object":
-      if (type !== kindof(b)) return false
+      if (type !== kindofPlain(b)) return false
 
       var constructor = getConstructorOf(a)
-      if (constructor === Object) return false
       if (constructor !== getConstructorOf(b)) return false
       if (hasValueOf(a) && hasValueOf(b)) return a.valueOf() === b.valueOf()
       return false

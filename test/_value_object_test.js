@@ -21,6 +21,26 @@ module.exports = function(egal) {
       egal(a, b).must.be.false()
     })
 
+    it("must return true given null inherited value objects", function() {
+      function Value(value) { this.value = value }
+
+      Value.prototype = Object.create(null, {
+        constructor: {value: Value, configurable: true, writeable: true}
+      })
+
+      Value.prototype.valueOf = function() { return this.value }
+
+      var a = new Value(42)
+      var b = new Value(42)
+      egal(a, b).must.be.true()
+    })
+
+    it("must return false given null inherited plain objects", function() {
+      var a = Object.create(null); a.valueOf = function() { return 42 }
+      var b = Object.create(null); b.valueOf = function() { return 42 }
+      egal(a, b).must.be.false()
+    })
+
     it("must return false given instance and plain object", function() {
       function Value(value) { this.value = value }
       Value.prototype.valueOf = function() { return this.value }

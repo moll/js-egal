@@ -2,6 +2,9 @@
 - Fixes `deepEgal` to consider `Array.prototype` equivalent to an empty array.
   JavaScript is a prototypical language after all and the prototype of an array
   is an array.
+- Fixes `egal` to consider two objects inheriting from `null` without
+  `constructor` properties, but `valueOf` functions, as plain objects and not
+  as value objects.
 
 ## 1.1.0 (Jun 13, 2015)
 - Adds `deepEgal` for comparing plain objects and arrays recursively.  
