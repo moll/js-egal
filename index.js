@@ -82,7 +82,7 @@ function deepEgalRecursively(a, b, aStack, bStack) {
 
 function getConstructorOf(obj) {
   var prototype = Object.getPrototypeOf(obj)
-  return prototype == null ? null : prototype.constructor
+  return prototype === null ? undefined : prototype.constructor
 }
 
 function hasValueOf(obj) {
@@ -91,15 +91,12 @@ function hasValueOf(obj) {
 }
 
 function kindofPlain(obj) {
-  if (isPlainObject(obj)) return "plain"
-  return kindof(obj)
+  var type = kindof(obj)
+  if (type === "object" && isObjectPlain(obj)) return "plain"
+  return type
 }
 
-function isPlainObject(obj) {
-  if (obj == null) return false
-  if (typeof obj !== "object") return false
-  if (Array.isArray(obj)) return false
-
+function isObjectPlain(obj) {
   var prototype = Object.getPrototypeOf(obj)
   if (prototype === null) return true
   if (!("constructor" in prototype)) return true
