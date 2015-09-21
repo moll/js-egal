@@ -1,4 +1,4 @@
-## Unreleased 
+## 1.2.0 (Sep 21, 2015)
 - Fixes `deepEgal` to consider `Array.prototype` equivalent to an empty array.
   JavaScript is a prototypical language after all and the prototype of an array
   is an array.
