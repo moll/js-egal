@@ -8,15 +8,15 @@ function egal(a, b) {
   var type
   switch (type = kindof(a)) {
     case "date":
-      if (type != kindof(b)) return false
+      if (type !== kindof(b)) return false
       return a.valueOf() === b.valueOf()
 
     case "regexp":
-      if (type != kindof(b)) return false
+      if (type !== kindof(b)) return false
       return a.toString() === b.toString()
 
     case "object":
-      if (type != kindof(b)) return false
+      if (type !== kindof(b)) return false
 
       var constructor = getConstructorOf(a)
       if (constructor === Object) return false
@@ -39,11 +39,11 @@ function deepEgalRecursively(a, b, aStack, bStack) {
   switch (type) {
     case "array":
     case "plain":
-      if (type != kindofPlain(b)) return false
+      if (type !== kindofPlain(b)) return false
 
       var aPos = aStack && aStack.indexOf(a)
       var bPos = bStack && bStack.indexOf(b)
-      if (aPos != bPos) return false
+      if (aPos !== bPos) return false
       if (aPos != null && aPos >= 0) return true
 
       aStack = aStack ? aStack.concat([a]) : [a]
@@ -54,7 +54,7 @@ function deepEgalRecursively(a, b, aStack, bStack) {
   var i
   switch (type) {
     case "array":
-      if (a.length != b.length) return false
+      if (a.length !== b.length) return false
       if (a.length === 0) return true
 
       for (i = 0; i < a.length; ++i)
