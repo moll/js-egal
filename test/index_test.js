@@ -1,3 +1,4 @@
+var Sinon = require("sinon")
 var wrap = require("lodash.wrap")
 
 describe("egal", function() {
@@ -66,9 +67,9 @@ describe("egal", function() {
 })
 
 describe("deepEgal", function() {
-  var deepEgal = wrap(require("..").deepEgal, function(orig, a, b) {
-    var equal = orig(a, b)
-    orig(b, a).must.equal(equal)
+  var deepEgal = wrap(require("..").deepEgal, function(orig, a, b, egal) {
+    var equal = orig(a, b, egal)
+    orig(b, a, egal).must.equal(equal)
     return equal
   })
 
@@ -371,6 +372,81 @@ describe("deepEgal", function() {
       require("./_function_test")(nestedDeepEgal)
       require("./_constructed_object_test")(nestedDeepEgal)
       require("./_value_object_test")(nestedDeepEgal)
+    })
+  })
+
+  describe("given egal function", function() {
+    var deepEgal = require("..").deepEgal
+
+    it("must be called with initial values", function() {
+      var egal = Sinon.spy()
+      var a = {}, b = {}
+      deepEgal(a, b, egal)
+
+      egal.callCount.must.equal(1)
+      egal.args[0].length.must.equal(2)
+      egal.args[0][0].must.equal(a)
+      egal.args[0][1].must.equal(b)
+    })
+
+    it("must return true if function returns true", function() {
+      deepEgal(1, 2, function() { return true }).must.be.true()
+    })
+
+    it("must return true if function returns truthy", function() {
+      deepEgal(1, 2, function() { return 1 }).must.be.true()
+    })
+
+    it("must return false if function returns false", function() {
+      deepEgal(1, 1, function() { return false }).must.be.false()
+    })
+
+    it("must recursive if function returns null", function() {
+      deepEgal([1], [1], function() { return null }).must.be.false()
+    })
+
+    it("must not recursive if function returns true", function() {
+      var egal = Sinon.spy(function() { return true })
+      deepEgal([42], [69], egal).must.be.true()
+      egal.callCount.must.equal(1)
+      egal.args[0].must.eql([[42], [69]])
+    })
+
+    it("must recursive if function returns null", function() {
+      var egal = Sinon.spy(function() { return null })
+      deepEgal([42], [42], egal).must.be.false()
+      egal.callCount.must.equal(2)
+      egal.args[0].must.eql([[42], [42]])
+      egal.args[1].must.eql([42, 42])
+    })
+
+    it("must not recursive if function returns false", function() {
+      var egal = Sinon.spy(function() { return false })
+      deepEgal([42], [69], egal).must.be.false()
+      egal.callCount.must.equal(1)
+      egal.args[0].must.eql([[42], [69]])
+    })
+
+    it("must be called when recursing to arrays", function() {
+      var egal = Sinon.spy()
+      var a = {}, b = {}
+      deepEgal([a], [b], egal)
+
+      egal.callCount.must.equal(2)
+      egal.args[1].length.must.equal(2)
+      egal.args[1][0].must.equal(a)
+      egal.args[1][1].must.equal(b)
+    })
+
+    it("must be called when recursing into objects", function() {
+      var egal = Sinon.spy()
+      var a = {}, b = {}
+      deepEgal({key: a}, {key: b}, egal)
+
+      egal.callCount.must.equal(2)
+      egal.args[1].length.must.equal(2)
+      egal.args[1][0].must.equal(a)
+      egal.args[1][1].must.equal(b)
     })
   })
 })

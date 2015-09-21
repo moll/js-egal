@@ -27,28 +27,40 @@ function egal(a, b) {
   }
 }
 
-function deepEgal(a, b) {
-  return deepEgalRecursively(a, b)
-}
-
-function deepEgalRecursively(a, b, aStack, bStack) {
+function maybeEgal(a, b) {
   if (egal(a, b)) return true
 
   var type = kindofPlain(a)
   switch (type) {
     case "array":
-    case "plain":
-      if (type !== kindofPlain(b)) return false
-
-      var aPos = aStack && aStack.indexOf(a)
-      var bPos = bStack && bStack.indexOf(b)
-      if (aPos !== bPos) return false
-      if (aPos != null && aPos >= 0) return true
-
-      aStack = aStack ? aStack.concat([a]) : [a]
-      bStack = bStack ? bStack.concat([b]) : [b]
-      break
+    case "plain": return type === kindofPlain(b) ? null : false
+    default: return false
   }
+}
+
+function deepEgal(a, b, egal) {
+  return deepEgalWith(typeof egal === "function" ? egal : maybeEgal, a, b)
+}
+
+function deepEgalWith(egal, a, b, aStack, bStack) {
+  var equal = egal(a, b)
+  if (equal != null) return Boolean(equal)
+
+  var type = kindof(a)
+  switch (type) {
+    /* eslint no-fallthrough: 0 */
+    case "array":
+    case "object": if (type === kindof(b)) break
+    default: return false
+  }
+
+  var aPos = aStack && aStack.indexOf(a)
+  var bPos = bStack && bStack.indexOf(b)
+  if (aPos !== bPos) return false
+  if (aPos != null && aPos >= 0) return true
+
+  aStack = aStack ? aStack.concat([a]) : [a]
+  bStack = bStack ? bStack.concat([b]) : [b]
 
   var i
   switch (type) {
@@ -57,11 +69,11 @@ function deepEgalRecursively(a, b, aStack, bStack) {
       if (a.length === 0) return true
 
       for (i = 0; i < a.length; ++i)
-        if (!deepEgalRecursively(a[i], b[i], aStack, bStack)) return false
+        if (!deepEgalWith(egal, a[i], b[i], aStack, bStack)) return false
 
       return true
 
-    case "plain":
+    case "object":
       var aKeys = keys(a)
       var bKeys = keys(b)
       if (aKeys.length !== bKeys.length) return false
@@ -72,11 +84,9 @@ function deepEgalRecursively(a, b, aStack, bStack) {
       for (i = 0; i < aKeys.length; ++i) if (aKeys[i] !== bKeys[i]) return false
 
       for (var key in a)
-        if (!deepEgalRecursively(a[key], b[key], aStack, bStack)) return false
+        if (!deepEgalWith(egal, a[key], b[key], aStack, bStack)) return false
 
       return true
-
-    default: return false
   }
 }
 

@@ -1,3 +1,7 @@
+## Unreleased
+- Adds support for calling `deepEgal` with a custom comparison function.  
+  Right now this is an advanced feature with its API not set in stone.
+
 ## 1.2.0 (Sep 21, 2015)
 - Fixes `deepEgal` to consider `Array.prototype` equivalent to an empty array.
   JavaScript is a prototypical language after all and the prototype of an array
