@@ -20,8 +20,8 @@ function egal(a, b) {
 
       var constructor = getConstructorOf(a)
       if (constructor !== getConstructorOf(b)) return false
-      if (hasValueOf(a) && hasValueOf(b)) return a.valueOf() === b.valueOf()
-      return false
+      if (!hasValueOf(a) || !hasValueOf(b)) return false
+      return deepEgal(a.valueOf(), b.valueOf())
 
     default: return false
   }

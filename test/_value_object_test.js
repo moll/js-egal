@@ -15,6 +15,30 @@ module.exports = function(egal) {
       egal(a, b).must.be.true()
     })
 
+    it("must return true given equivalent array values", function() {
+      function Value(value) { this.value = value }
+      Value.prototype.valueOf = function() { return [42, this.value] }
+      var a = new Value(42)
+      var b = new Value(42)
+      egal(a, b).must.be.true()
+    })
+
+    it("must return false given unequivalent array values", function() {
+      function Value(value) { this.value = value }
+      Value.prototype.valueOf = function() { return [42, this.value] }
+      var a = new Value(42)
+      var b = new Value(69)
+      egal(a, b).must.be.false()
+    })
+
+    xit("must return false given valueOfs returning self", function() {
+      function Value(value) { this.value = value }
+      Value.prototype.valueOf = function() { return this }
+      var a = new Value(42)
+      var b = new Value(42)
+      egal(a, b).must.be.false()
+    })
+
     it("must return false given plain object", function() {
       var a = {valueOf: function() { return 1 }}
       var b = {valueOf: function() { return 1 }}

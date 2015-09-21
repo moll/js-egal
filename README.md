@@ -24,26 +24,42 @@ When and why to use `egal` over the triple-equals `===` operator?
 - When you need to **compare objects or arrays recursively**, Egal.js has
   [`deepEgal`](#deep-comparison).
 
+#### Primitives
 A **primivitive** and its **boxed object** equivalent are considered different.
 Allowing unexpected boxed objects (e.g. `new Boolean(false)`) through is risky
 as they're extremely error prone (just think of `!!new Boolean(false)` returning
 `true`).  Comparing two boxed objects of the same value, on the other hand, will
 work.
 
+#### Objects
 **Non-value objects**, like `Array` or `Object`, are compared by `egal` as `===`
 does it — based on object identity. For recursive or deep comparison, see
 [`deepEgal`](#deep-comparison).
 
+#### NaN
 **NaN**s (not-a-number) are **not equal** (matching how `===` behaves). This is
 because when you compare results of two mathematical operations that may both
 end up as `NaN`, you might inadvertently assume the calculations went fine. If
 you expect `NaN`, you can use JavaScript's built-in `isNaN` to test for that.
 
+#### Zeros
 **Negative and positive** zeros are **equal** (also matching how `===` behaves).
 You might end up with unexpected negative zeros via various calculations and
 when you don't need to distinguish between the two, you'll end up with too many
 false negatives. If you need to handle negative zeros differently, see the
 article on [Sameness in JavaScript][sameness].
+
+#### Value Objects
+**Value objects** can also return **compound values**. That is, you need not
+return a single primitive value from `valueOf`, but merely a _more_ primitive
+one. Those values are compared with [`deepEgal`](#deep-comparison).
+
+```javascript
+function Point(x, y) { this.x = x; this.y = y }
+Point.prototype.valueOf = function() { return [this.x, this.y] }
+egal(new Point(42, 69), new Point(42, 69)) // => true
+egal(new Point(42, 69), new Point(13, 42)) // => false
+```
 
 [npm-badge]: https://img.shields.io/npm/v/egal.svg
 [travis-badge]: https://travis-ci.org/moll/js-egal.png?branch=master

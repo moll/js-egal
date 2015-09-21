@@ -6,6 +6,17 @@
   `constructor` properties, but `valueOf` functions, as plain objects and not
   as value objects.
 
+- Adds support for comparing value objects that return compound values from
+  their `valueOf` function. That is, you no longer need to return a single
+  primitive value from `valueOf`, but merely a _more_ primitive one than before:
+
+  ```javascript
+  function Point(x, y) { this.x = x; this.y = y }
+  Point.prototype.valueOf = function() { return [this.x, this.y] }
+  egal(new Point(42, 69), new Point(42, 69)) // => true
+  egal(new Point(42, 69), new Point(13, 42)) // => false
+  ```
+
 ## 1.1.0 (Jun 13, 2015)
 - Adds `deepEgal` for comparing plain objects and arrays recursively.  
   It's still type-safe, so value objects and instances of classes nested in
