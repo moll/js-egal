@@ -1,4 +1,4 @@
-## Unreleased
+## 1.3.0 (Sep 22, 2015)
 - Adds support for calling `deepEgal` with a custom comparison function.  
   Right now this is an advanced feature with its API not set in stone.
 
