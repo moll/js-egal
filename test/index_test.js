@@ -16,7 +16,7 @@ describe("egal", function() {
   require("./_regexp_test")(egal)
   require("./_date_test")(egal)
   require("./_function_test")(egal)
-  require("./_value_object_test")(egal)
+  require("./_object_with_value_of_test")(egal)
 
   it("must return false given an empty array and empty object", function() {
     // There was once an assertion library that considered {} equivalent to []
@@ -85,8 +85,8 @@ describe("deepEgal", function() {
   require("./_regexp_test")(deepEgal)
   require("./_date_test")(deepEgal)
   require("./_function_test")(deepEgal)
-  require("./_constructed_object_test")(deepEgal)
-  require("./_value_object_test")(deepEgal)
+  require("./_object_with_constructor_test")(deepEgal)
+  require("./_object_with_value_of_test")(deepEgal)
 
   describe("given Array", function() {
     it("must return true given equivalent empty arrays", function() {
@@ -168,8 +168,8 @@ describe("deepEgal", function() {
       require("./_regexp_test")(nestedDeepEgal)
       require("./_date_test")(nestedDeepEgal)
       require("./_function_test")(nestedDeepEgal)
-      require("./_constructed_object_test")(nestedDeepEgal)
-      require("./_value_object_test")(nestedDeepEgal)
+      require("./_object_with_constructor_test")(nestedDeepEgal)
+      require("./_object_with_value_of_test")(nestedDeepEgal)
     })
   })
 
@@ -370,8 +370,8 @@ describe("deepEgal", function() {
       require("./_regexp_test")(nestedDeepEgal)
       require("./_date_test")(nestedDeepEgal)
       require("./_function_test")(nestedDeepEgal)
-      require("./_constructed_object_test")(nestedDeepEgal)
-      require("./_value_object_test")(nestedDeepEgal)
+      require("./_object_with_constructor_test")(nestedDeepEgal)
+      require("./_object_with_value_of_test")(nestedDeepEgal)
     })
   })
 
@@ -389,30 +389,14 @@ describe("deepEgal", function() {
       egal.args[0][1].must.equal(b)
     })
 
-    it("must return true if function returns true", function() {
-      deepEgal(1, 2, function() { return true }).must.be.true()
-    })
-
-    it("must return true if function returns truthy", function() {
-      deepEgal(1, 2, function() { return 1 }).must.be.true()
-    })
-
-    it("must return false if function returns false", function() {
-      deepEgal(1, 1, function() { return false }).must.be.false()
-    })
-
-    it("must recursive if function returns null", function() {
-      deepEgal([1], [1], function() { return null }).must.be.false()
-    })
-
-    it("must not recursive if function returns true", function() {
+    it("must not recurse if function returns true", function() {
       var egal = Sinon.spy(function() { return true })
       deepEgal([42], [69], egal).must.be.true()
       egal.callCount.must.equal(1)
       egal.args[0].must.eql([[42], [69]])
     })
 
-    it("must recursive if function returns null", function() {
+    it("must recurse if function returns null", function() {
       var egal = Sinon.spy(function() { return null })
       deepEgal([42], [42], egal).must.be.false()
       egal.callCount.must.equal(2)
@@ -420,7 +404,7 @@ describe("deepEgal", function() {
       egal.args[1].must.eql([42, 42])
     })
 
-    it("must not recursive if function returns false", function() {
+    it("must not recurse if function returns false", function() {
       var egal = Sinon.spy(function() { return false })
       deepEgal([42], [69], egal).must.be.false()
       egal.callCount.must.equal(1)
