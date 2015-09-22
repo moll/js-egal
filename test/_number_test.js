@@ -12,14 +12,6 @@ module.exports = function(egal) {
       egal(42, 69).must.be.false()
     })
 
-    it("must return false given string primitive", function() {
-      egal(42, "69").must.be.false()
-    })
-
-    it("must return false given string primitive", function() {
-      egal(42, new String("69")).must.be.false()
-    })
-
     it("must return true given equivalent objects", function() {
       egal(new Number(42), new Number(42)).must.be.true()
     })
@@ -30,6 +22,14 @@ module.exports = function(egal) {
 
     it("must return false given equivalent primitive and object", function() {
       egal(42, new Number(42)).must.be.false()
+    })
+
+    it("must return false given string primitive", function() {
+      egal(42, "69").must.be.false()
+    })
+
+    it("must return false given string object", function() {
+      egal(42, new String("69")).must.be.false()
     })
 
     describe("given -0", function() {
