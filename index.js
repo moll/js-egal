@@ -17,9 +17,7 @@ function egal(a, b) {
 
     case "object":
       if (type !== kindofPlain(b)) return false
-
-      var constructor = getConstructorOf(a)
-      if (constructor !== getConstructorOf(b)) return false
+      if (getConstructorOf(a) !== getConstructorOf(b)) return false
       if (!hasValueOf(a) || !hasValueOf(b)) return false
       return deepEgal(a.valueOf(), b.valueOf())
 
