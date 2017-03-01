@@ -35,7 +35,7 @@
   deepEgal({name: "John"}, {name: "John"}) // => true
   deepEgal({stats: {age: 13}}, {{stats: age: 13}}) // => true
   deepEgal([1, 2, 3], [1, 2, 3]) // => true
-  deepEgal(new Model("John"), new Model("John")) // => false
+  deepEgal(new Model("John"), new Model("John")) // => true
   deepEgal(new Date(2000, 5), new Date(2000, 5)) // => true
   ```
 
